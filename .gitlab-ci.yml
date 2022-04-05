@@ -1,0 +1,19 @@
+image: mcr.microsoft.com/dotnet/sdk:6.0
+
+services:
+  - name: postgres:latest
+    alias: postgres
+
+variables:
+  POSTGRES_USER: "postgres"
+  POSTGRES_PASSWORD: "qweQWE123!@#"
+  POSTGRES_HOST_AUTH_METHOD: "trust"
+
+build:
+  stage: test
+  script:
+    - 'apt-get update && apt-get install -y --no-install-recommends --allow-downgrades postgresql-client'
+    - 'psql -h postgres -U postgres -a -f ./hw6-dump.sql'
+    - 'dotnet test -v d ./hw6.tests/PostgreSQL_HW6_Test.dll'
+  tags:
+    - docker-shared
